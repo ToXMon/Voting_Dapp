@@ -10,7 +10,7 @@ abstract contract ProposalManager {
         uint256 amount;
         address proposer;
         bool executed;
-        uint256 numberVotes;
+        
     }
     
     uint256 public proposalCount;
@@ -27,6 +27,7 @@ abstract contract ProposalManager {
         string memory _title,
         string memory _description,
         uint256 _deadline,
-        uint256 _amount
+        uint256 _amount,
+        address _proposer
     ) internal virtual returns (uint256);
 }

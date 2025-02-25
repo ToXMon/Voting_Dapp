@@ -4,13 +4,13 @@ pragma solidity ^0.8.23;
 import "./Proposal.sol";
 import "./Treasury.sol";
 
-abstract contract VotingSystem is ProposalManager {
+ contract VotingSystem is ProposalManager {
     struct Voter {
         bool voted;
         uint8 vote; // 0=Abstain, 1=Yes, 2=No
     }
     
-    Treasury public immutable treasury;
+    Treasury public treasury;
     uint256 public quorum;
     uint256 public votingPeriod;
     
@@ -44,7 +44,7 @@ abstract contract VotingSystem is ProposalManager {
         uint256 _deadline,
         uint256 _amount,
         address _proposer
-    ) internal virtual returns (uint256) {
+    ) internal virtual override returns (uint256) {
         uint256 proposalId = ++proposalCount;
         proposals[proposalId] = Proposal({
             id: proposalId,
@@ -54,7 +54,6 @@ abstract contract VotingSystem is ProposalManager {
             deadline: _deadline,
             amount: _amount,
             proposer: _proposer,
-            numberVotes: 0,
             executed: false
         });
         return proposalId;
@@ -119,5 +118,10 @@ abstract contract VotingSystem is ProposalManager {
         } else {
             treasury.releaseFunds(proposalId, payable(address(0xdead)));
         }
+    }
+    
+    // Function to update the treasury address (for testing purposes)
+    function setTreasury(address _treasury) external {
+        treasury = Treasury(_treasury);
     }
 }
